@@ -91,7 +91,33 @@ export class Column extends Group {
     //
     // Our height is set to the height determined by stacking our children vertically.
     protected override _doLocalSizing() : void {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        for (let child of this.children){
+            // sum up the height configurations
+            this.minH += child.minH;
+            this.naturalH += child.naturalH;
+            this.maxH += child.maxH;
+            // find max value of child width
+            this.minW = Math.max(this.minW, child.minW);
+            this.naturalW = Math.max(this.naturalW, child.naturalW);
+            this.maxW = Math.max(this.maxW, child.maxW);
+        }
+        // set configuration
+        this.hConfig = {
+            min: this.minH,
+            nat: this.naturalH,
+            max: this.maxH
+        };
+        this.wConfig = {
+            min: this.minW,
+            nat: this.naturalW,
+            max: this.maxW
+        };
+        // set the current size to natural size
+        this.w = this.naturalW;
+        this.h = this.naturalH;
+
+        
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -155,7 +181,16 @@ export class Column extends Group {
         let availCompr = 0; 
         let numSprings = 0; 
 
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        for (let child of this.children) {
+            if (child instanceof Spring){
+                numSprings += 1
+                continue;
+            }
+            natSum += child.naturalH;
+            let compr = child.naturalH - child.minH;
+            availCompr += compr;
+        }
 
         return [natSum, availCompr, numSprings];
     }
@@ -167,7 +202,20 @@ export class Column extends Group {
     // are no child springs, this does nothing (which has the eventual effect of leaving 
     // the space at the bottom of the column as a fallback strategy).
     protected _expandChildSprings(excess : number, numSprings : number) : void {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        // if tehre's no springs
+        if (numSprings == 0){
+            return;
+        }
+        // calculate average excess for each spring
+        let eachExcess = excess / numSprings;
+        for (let child of this.children) {
+            // Adjust the height of each spring
+            if (child instanceof Spring) {
+                child.h += eachExcess; 
+            }
+        }
+        this.damageAll()
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -187,7 +235,16 @@ export class Column extends Group {
         // each child, then subtract that fraction of the total shortfall 
         // from the natural height of that child, to get the assigned height.
         for (let child of this.children) {
-            //=== YOUR CODE HERE ===
+            //===YOUR CODE HERE ===
+            if (child instanceof Spring){
+                continue;
+            }
+            // calculate the fraction of shortfall should be assigned for this child
+            let compr = child.naturalH - child.minH
+            let fraction = compr / availCompr
+            // make sure the height cannot fall lower than the minimum height
+            child.h = Math.max(child.minH,child.naturalH-fraction * shortfall)
+
         }
 }
 
@@ -227,11 +284,29 @@ export class Column extends Group {
         for (let child of this.children) {
             child.y = ypos;
             ypos += child.h;
-        }
-
-        // apply our justification setting for the horizontal
+            // apply our justification setting for the horizontal
         
-        //=== YOUR CODE HERE ===
+            //=== YOUR CODE HERE ===
+            switch(this.wJustification){
+                case 'left':
+                    child.x = 0;
+                    break;
+                case 'center':
+                    child.x = this.w/2 - child.w/2
+                    break;
+                case 'right':
+                    child.x = this.w - child.w;
+                    break;
+                default:
+                    child.x = 0;
+            }
+    
+        }
+        this.damageAll()
+        
+
+        
+        
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .

@@ -23,10 +23,16 @@ export class Strut extends DrawnObjectBase {
     get w() { return super.w; }
     set w(v) {
         //=== YOUR CODE HERE ===
+        // this._wConfig = SizeConfig.fixed(v);
+        // this._w = v;
+        // this.damageAll();
     }
     get h() { return super.h; }
     set h(v) {
         //=== YOUR CODE HERE ===
+        // this._hConfig = SizeConfig.fixed(v);
+        // this._h = v;
+        // this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Override configuration setters to enforce fixed size

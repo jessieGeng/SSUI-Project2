@@ -78,6 +78,23 @@ export class Row extends Group {
     // Our width is set to the width determined by stacking our children horizontally.
     _doLocalSizing() {
         //=== YOUR CODE HERE ===max};
+        for (let child of this.children) {
+            // sum up the width configurations
+            this.minW += child.minW;
+            this.naturalW += child.naturalW;
+            this.maxW += child.maxW;
+            // find max value of child height
+            this.minH = Math.max(this.minH, child.minH);
+            this.naturalH = Math.max(this.naturalH, child.naturalH);
+            this.maxH = Math.max(this.maxH, child.maxH);
+        }
+        // set configuration
+        this.hConfig = new SizeConfig(this.minH, this.naturalH, this.maxH);
+        this.wConfig = new SizeConfig(this.minW, this.naturalW, this.maxW);
+        // set the current size to natural size
+        this.w = this.naturalW;
+        this.h = this.naturalH;
+        // this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // This method adjusts the width of the children to do horizontal springs and struts 
@@ -135,6 +152,18 @@ export class Row extends Group {
         let availCompr = 0;
         let numSprings = 0;
         //=== YOUR CODE HERE ===
+        for (let child of this.children) {
+            // count number of springs
+            if (child instanceof Spring) {
+                numSprings += 1;
+            }
+            else {
+                // if not a spring, sum up compressable space
+                natSum += child.naturalW;
+                let compr = child.naturalW - child.minW;
+                availCompr += compr;
+            }
+        }
         return [natSum, availCompr, numSprings];
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -144,6 +173,19 @@ export class Row extends Group {
     // the space at the right of the row as a fallback strategy).
     _expandChildSprings(excess, numSprings) {
         //=== YOUR CODE HERE ===
+        // if tehre's no springs
+        if (numSprings == 0) {
+            return;
+        }
+        // calculate average excess for each spring
+        let eachExcess = excess / numSprings;
+        for (let child of this.children) {
+            // Adjust the width of each spring
+            if (child instanceof Spring) {
+                child.w += eachExcess;
+            }
+        }
+        this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Contract our child objects to make up the given amount of shortfall.  Springs
@@ -160,7 +202,16 @@ export class Row extends Group {
         // from the natural height of that child, to get the assigned height.
         for (let child of this.children) {
             //=== YOUR CODE HERE ===
+            if (child instanceof Spring) {
+                continue;
+            }
+            // calculate the fraction of shortfall should be assigned for this child
+            let compr = child.naturalW - child.minW;
+            let fraction = compr / availCompr;
+            // make sure the width cannot fall lower than the minimum
+            child.w = Math.max(child.minW, child.naturalW - fraction * shortfall);
         }
+        this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Do the local portion of the top down pass which sets the final 
@@ -195,9 +246,23 @@ export class Row extends Group {
         for (let child of this.children) {
             child.x = xpos;
             xpos += child.w;
+            // apply our justification setting for the vertical
+            //=== YOUR CODE HERE ===
+            switch (this.hJustification) {
+                case 'top':
+                    child.y = 0;
+                    break;
+                case 'center':
+                    child.y = this.h / 2 - child.h / 2;
+                    break;
+                case 'bottom':
+                    child.y = this.h - child.w;
+                    break;
+                default:
+                    child.y = 0;
+            }
         }
-        // apply our justification setting for the vertical
-        //=== YOUR CODE HERE ===
+        this.damageAll();
     }
 }
 //===================================================================

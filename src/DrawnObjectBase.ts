@@ -107,12 +107,14 @@ export class DrawnObjectBase {
     protected _x : number = 0;
     public get x() : number {return this._x;}  
     public set x(v : number) {
-        if (v !== this.x) {
+        if (v !== this._x) {
 
              // don't forget to declare damage whenever something changes
              // that could affect the display
 
-            //=== YOUR CODE HERE ===
+            //===YOUR CODE HERE ===
+            this._x = v
+            this.damageAll();
         }
     }    
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -121,7 +123,11 @@ export class DrawnObjectBase {
     protected _y : number = 0;
     public get y() : number {return this._y;}
     public set y(v : number) {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        if (v !== this._y) {
+            this._y = v
+            this.damageAll();
+        }
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -139,7 +145,11 @@ export class DrawnObjectBase {
     protected _w : number = 42;
     public get w() : number {return this._w;}
     public set w(v : number) {
-            //=== YOUR CODE HERE ===
+            //===YOUR CODE HERE ===
+            if (v !== this._w) {
+                this._w = v;
+                this.damageAll();
+            }
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -148,7 +158,11 @@ export class DrawnObjectBase {
     protected _wConfig : SizeConfigLiteral = SizeConfig.elastic(42);
     public get wConfig() : SizeConfigLiteral {return this._wConfig;}
     public set wConfig(v : SizeConfigLiteral) {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        if (v !== this._wConfig) {
+            this._wConfig = v
+            this.damageAll();
+        }
     }
         
     public get naturalW() : number {return this._wConfig.nat;}
@@ -173,7 +187,11 @@ export class DrawnObjectBase {
     protected _h : number = 13;
     public get h() : number {return this._h;}
     public set h(v : number) {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        if (v !== this._h) {
+            this._h = v
+            this.damageAll();
+        }
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -182,7 +200,11 @@ export class DrawnObjectBase {
     protected _hConfig : SizeConfigLiteral = SizeConfig.elastic(13);
     public get hConfig() : SizeConfigLiteral {return this._hConfig;}
     public set hConfig(v : SizeConfigLiteral) {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        if (v !== this._hConfig) {
+            this._hConfig = v
+            this.damageAll();
+        }
     }
 
     public get naturalH() : number {return this._hConfig.nat;}
@@ -215,7 +237,11 @@ export class DrawnObjectBase {
     protected _visible : boolean = true;
     public get visible() : boolean {return this._visible;}
     public set visible(v : boolean) {
-            //=== YOUR CODE HERE ===
+            //===YOUR CODE HERE ===
+            if (v !== this._visible) {
+                this._visible = v;
+                this.damageAll();
+            }
     }
 
     //-------------------------------------------------------------------
@@ -440,7 +466,13 @@ export class DrawnObjectBase {
     public applyClip(ctx : DrawContext, 
                      clipx : number, clipy : number, clipw : number, cliph : number) 
     {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        // ctx.save();
+        // draw the new clipping rectangle
+        ctx.beginPath();
+        ctx.rect(clipx, clipy, clipw, cliph);
+        // Apply the clip
+        ctx.clip();
     }
 
     // Utility routine to create a new rectangular path at our bounding box.
@@ -502,10 +534,16 @@ export class DrawnObjectBase {
     // 3) reduce the clipping region of the context object so it does not include 
     //    any area outside the child's bounding box.
     protected _startChildDraw(childIndx : number, ctx: DrawContext) {
-        // save the state of the context object on its internal stack
+        // 1) save full the current state of the context object
         ctx.save();
 
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        const child = this._children[childIndx];
+        // apply a translation tranformation to move to the child's corrdinate system.
+        ctx.translate(child.x, child.y);
+        // 3) reduce the clipping region of the context object so it does not include 
+        //    any area outside the child's bounding box.
+        this.applyClip(ctx, 0, 0, child.w, child.h);
     }
 
     
@@ -632,7 +670,13 @@ export class DrawnObjectBase {
     // declaring extra damage. This method passes a damage report up the tree via 
     // our parent.
     public damageArea(xv: number, yv : number, wv : number, hv : number) : void {
-        //=== YOUR CODE HERE ===
+        //===YOUR CODE HERE ===
+        if (this.parent){
+            // report the damage to parent in the tree
+            this.parent._damageFromChild(this, xv, yv, wv, hv);
+        }
+        
+        
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -656,7 +700,24 @@ export class DrawnObjectBase {
                                xInChildCoords: number, yInChildCoords: number, 
                                wv : number, hv: number) : void 
     {
-            //=== YOUR CODE HERE ===
+            //===YOUR CODE HERE ===
+            // translate to local coordinates
+            let localx = xInChildCoords + child.x;
+            let localy = yInChildCoords + child.y;
+            // limit within the bound
+            // find where the damage starts
+            // let damagex = Math.max(0, localx)
+            // let damagey = Math.max(0, localy)
+            // // find the effective width and height of the damage area within bound
+            // // we only want the part of the damage that is within the bounded area (within this w and h)
+            // let damagew = Math.min(this.w, damagex + wv) - damagex;
+            // let damageh = Math.min(this.h, damagey + hv) - damagey
+            // report the damage up to the tree
+            if (this.parent){
+                // this.parent._damageFromChild(this, damagex, damagey, damagew, damageh);
+                this.parent._damageFromChild(this, localx, localy, wv, hv);
+            }
+            
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .

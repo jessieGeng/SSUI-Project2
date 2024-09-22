@@ -25,16 +25,25 @@ export class TextObject extends DrawnObjectBase {
     get text() { return this._text; }
     set text(v) {
         //=== YOUR CODE HERE ===
+        this._text = v;
+        this._recalcSize();
+        // this.damageAll();
     }
     get font() { return this._font; }
     set font(v) {
         //=== YOUR CODE HERE ===
+        this._font = v;
+        this._recalcSize();
+        // this.damageAll();
     }
     get padding() { return this._padding; }
     set padding(v) {
         if (typeof v === 'number')
             v = { w: v, h: v };
         //=== YOUR CODE HERE ===
+        this._padding = v;
+        this._recalcSize();
+        // this.damageAll();
     }
     get renderType() { return this._renderType; }
     set rederType(v) { this._renderType = v; }
@@ -46,9 +55,23 @@ export class TextObject extends DrawnObjectBase {
     // Recalculate the size of this object based on the size of the text
     _recalcSize(ctx) {
         //=== YOUR CODE HERE ===
+        if (!ctx) {
+            // create a ctx if we do not have one
+            const offscreenCanvas = document.createElement('canvas');
+            offscreenCanvas.width = this.w;
+            offscreenCanvas.height = this.h;
+            let ctx = offscreenCanvas.getContext('2d');
+            if (!ctx) {
+                throw new Error("Failed to get 2D context from off-screen canvas.");
+            }
+        }
+        let size = this._measureText(this.text, this.font, ctx);
+        this.w = size.w + this.padding.w * 2;
+        this.h = size.h + this.padding.h * 2;
         // set the size configuration to be fixed at that size
         this.wConfig = SizeConfig.fixed(this.w);
         this.hConfig = SizeConfig.fixed(this.h);
+        this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Method to draw this object.  Note that we are only handling left-to-right
@@ -69,6 +92,13 @@ export class TextObject extends DrawnObjectBase {
                 clr = this.color.toString();
             }
             //=== YOUR CODE HERE ===
+            ctx.font = this.font;
+            if (this._renderType === 'fill') {
+                ctx.fillText(this._text, this._padding.w, this._padding.h);
+            }
+            else {
+                ctx.strokeText(this._text, this._padding.w, this._padding.h);
+            }
         }
         finally {
             // restore the drawing context to the state it was given to us in
