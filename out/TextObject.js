@@ -55,16 +55,7 @@ export class TextObject extends DrawnObjectBase {
     // Recalculate the size of this object based on the size of the text
     _recalcSize(ctx) {
         //=== YOUR CODE HERE ===
-        if (!ctx) {
-            // create a ctx if we do not have one
-            const offscreenCanvas = document.createElement('canvas');
-            offscreenCanvas.width = this.w;
-            offscreenCanvas.height = this.h;
-            let ctx = offscreenCanvas.getContext('2d');
-            if (!ctx) {
-                throw new Error("Failed to get 2D context from off-screen canvas.");
-            }
-        }
+        // set the wideth and height with padding
         let size = this._measureText(this.text, this.font, ctx);
         this.w = size.w + this.padding.w * 2;
         this.h = size.h + this.padding.h * 2;
@@ -93,11 +84,13 @@ export class TextObject extends DrawnObjectBase {
             }
             //=== YOUR CODE HERE ===
             ctx.font = this.font;
+            ctx.fillStyle = clr;
+            let size = this._measureText(this.text, this.font, ctx);
             if (this._renderType === 'fill') {
-                ctx.fillText(this._text, this._padding.w, this._padding.h);
+                ctx.fillText(this._text, 0, size.baseln);
             }
             else {
-                ctx.strokeText(this._text, this._padding.w, this._padding.h);
+                ctx.strokeText(this._text, 0, size.baseln);
             }
         }
         finally {
