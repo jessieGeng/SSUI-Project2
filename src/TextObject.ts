@@ -37,7 +37,7 @@ export class TextObject extends DrawnObjectBase {
     public set text(v : string) {
         //=== YOUR CODE HERE ===
         this._text = v;
-        this._recalcSize();
+        // this._recalcSize();
         // this.damageAll();
     }
 
@@ -72,7 +72,7 @@ export class TextObject extends DrawnObjectBase {
     public set font(v : string) {
         //=== YOUR CODE HERE ===
         this._font = v;
-        this._recalcSize();
+        // this._recalcSize();
         // this.damageAll();
     }  
     
@@ -87,7 +87,7 @@ export class TextObject extends DrawnObjectBase {
         if (typeof v === 'number') v = {w:v, h:v};
         //=== YOUR CODE HERE ===
         this._padding = v;
-        this._recalcSize();
+        // this._recalcSize();
         // this.damageAll();
     }
     

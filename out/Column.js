@@ -78,16 +78,30 @@ export class Column extends Group {
     // Our height is set to the height determined by stacking our children vertically.
     _doLocalSizing() {
         //===YOUR CODE HERE ===
+        let minW = 0;
+        let naturalW = 0;
+        let maxW = 0;
+        let minH = 0;
+        let naturalH = 0;
+        let maxH = 0;
         for (let child of this.children) {
+            console.log("column child:", child);
             // sum up the height configurations
-            this.minH += child.minH;
-            this.naturalH += child.naturalH;
-            this.maxH += child.maxH;
+            minH += child.minH;
+            naturalH += child.naturalH;
+            maxH += child.maxH;
             // find max value of child width
-            this.minW = Math.max(this.minW, child.minW);
-            this.naturalW = Math.max(this.naturalW, child.naturalW);
-            this.maxW = Math.max(this.maxW, child.maxW);
+            minW = Math.max(this.minW, child.minW);
+            naturalW = Math.max(this.naturalW, child.naturalW);
+            maxW = Math.max(this.maxW, child.maxW);
         }
+        // this.minW = minW;
+        // this.naturalW = naturalW;
+        // this.maxW = maxW;
+        // this.minH = minH;
+        // this.naturalH = naturalH;
+        // this.maxH = maxH;
+        console.log("column total:", this);
         // set configuration
         this.hConfig = {
             min: this.minH,
@@ -100,8 +114,8 @@ export class Column extends Group {
             max: this.maxW
         };
         // set the current size to natural size
-        this.w = this.naturalW;
-        this.h = this.naturalH;
+        // this.w = this.naturalW;
+        // this.h = this.naturalH;
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // This method adjusts the height of the children to do vertical springs and struts 

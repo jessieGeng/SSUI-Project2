@@ -26,14 +26,14 @@ export class TextObject extends DrawnObjectBase {
     set text(v) {
         //=== YOUR CODE HERE ===
         this._text = v;
-        this._recalcSize();
+        // this._recalcSize();
         // this.damageAll();
     }
     get font() { return this._font; }
     set font(v) {
         //=== YOUR CODE HERE ===
         this._font = v;
-        this._recalcSize();
+        // this._recalcSize();
         // this.damageAll();
     }
     get padding() { return this._padding; }
@@ -42,7 +42,7 @@ export class TextObject extends DrawnObjectBase {
             v = { w: v, h: v };
         //=== YOUR CODE HERE ===
         this._padding = v;
-        this._recalcSize();
+        // this._recalcSize();
         // this.damageAll();
     }
     get renderType() { return this._renderType; }

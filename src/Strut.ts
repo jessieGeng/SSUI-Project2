@@ -29,16 +29,18 @@ export class Strut extends DrawnObjectBase {
     public override get w() {return super.w;}  
     public override set w(v : number) {
         //=== YOUR CODE HERE ===
-        // this._wConfig = SizeConfig.fixed(v);
-        // this._w = v;
+        this._wConfig = SizeConfig.fixed(v);
+        this._w = v;
+        console.log("struct w:", this.w);
         // this.damageAll();
     }
 
     public override get h() {return super.h;}
     public override set h(v : number) {
         //=== YOUR CODE HERE ===
-        // this._hConfig = SizeConfig.fixed(v);
-        // this._h = v;
+        this._hConfig = SizeConfig.fixed(v);
+        this._h = v;
+        console.log("stuct h:", this.h);
         // this.damageAll();
     }
 

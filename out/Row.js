@@ -78,22 +78,58 @@ export class Row extends Group {
     // Our width is set to the width determined by stacking our children horizontally.
     _doLocalSizing() {
         //=== YOUR CODE HERE ===max};
+        let minW = 0;
+        let naturalW = 0;
+        let maxW = 0;
+        let minH = 0;
+        let naturalH = 0;
+        let maxH = 0;
         for (let child of this.children) {
             // sum up the width configurations
-            this.minW += child.minW;
-            this.naturalW += child.naturalW;
-            this.maxW += child.maxW;
+            minW += child.minW;
+            naturalW += child.naturalW;
+            maxW += child.maxW;
             // find max value of child height
-            this.minH = Math.max(this.minH, child.minH);
-            this.naturalH = Math.max(this.naturalH, child.naturalH);
-            this.maxH = Math.max(this.maxH, child.maxH);
+            minH = Math.max(this.minH, child.minH);
+            naturalH = Math.max(this.naturalH, child.naturalH);
+            maxH = Math.max(this.maxH, child.maxH);
         }
-        // set configuration
+        // this.minW = minW;
+        // this.naturalW = naturalW;
+        // this.maxW = maxW;
+        // this.minH = minH;
+        // this.naturalH = naturalH;
+        // this.maxH = maxH;
+        // Set configurations based on collected values
         this.hConfig = new SizeConfig(this.minH, this.naturalH, this.maxH);
         this.wConfig = new SizeConfig(this.minW, this.naturalW, this.maxW);
+        // for (let child of this.children) {
+        //     if (child instanceof Spring){
+        //         continue;
+        //     }
+        //     // sum up the width configurations
+        //     this.minW += child.minW;
+        //     this.naturalW += child.naturalW;
+        //     this.maxW += child.maxW;
+        //     // find max value of child height
+        //     this.minH = Math.max(this.minH, child.minH);
+        //     this.naturalH = Math.max(this.naturalH, child.naturalH);
+        //     this.maxH = Math.max(this.maxH, child.maxH);
+        // }
+        // // set configuration
+        // this.hConfig = new SizeConfig (
+        //     this.minH,
+        //     this.naturalH,
+        //     this.maxH
+        // );
+        // this.wConfig = new SizeConfig (
+        //     this.minW,
+        //     this.naturalW,
+        //     this.maxW
+        // );
         // set the current size to natural size
-        this.w = this.naturalW;
-        this.h = this.naturalH;
+        // this.w = this.naturalW;
+        // this.h = this.naturalH;
         // this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -256,7 +292,7 @@ export class Row extends Group {
                     child.y = this.h / 2 - child.h / 2;
                     break;
                 case 'bottom':
-                    child.y = this.h - child.w;
+                    child.y = this.h - child.h;
                     break;
                 default:
                     child.y = 0;
