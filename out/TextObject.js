@@ -13,6 +13,8 @@ export class TextObject extends DrawnObjectBase {
         // silently turn into 'black' or be ignored if they are not understood by the 
         // underlying JavaScript implementation.
         this._color = 'black';
+        this.checkEditedW = false;
+        this.checkEditedH = false;
         this._text = text;
         this._font = font;
         if (typeof padding === 'number')
@@ -49,12 +51,37 @@ export class TextObject extends DrawnObjectBase {
     set rederType(v) { this._renderType = v; }
     get color() { return this._color; }
     set color(v) { this._color = v; }
+    // Override w & h setters so they enforce fixed size
+    get w() { return super.w; }
+    set w(v) {
+        //=== YOUR CODE HERE ===
+        if (this.checkEditedW) {
+            return;
+        }
+        this.checkEditedW = true;
+        this._wConfig = SizeConfig.fixed(v);
+        this._w = v;
+        this.damageAll();
+    }
+    get h() { return super.h; }
+    set h(v) {
+        //=== YOUR CODE HERE ===
+        if (this.checkEditedH) {
+            return;
+        }
+        this.checkEditedH = true;
+        this._hConfig = SizeConfig.fixed(v);
+        this._h = v;
+        this.damageAll();
+    }
     //-------------------------------------------------------------------
     // Methods
     //-------------------------------------------------------------------
     // Recalculate the size of this object based on the size of the text
     _recalcSize(ctx) {
         //=== YOUR CODE HERE ===
+        console.log("text ctx:", ctx);
+        console.log("text this:", this);
         // set the wideth and height with padding
         let size = this._measureText(this.text, this.font, ctx);
         this.w = size.w + this.padding.w * 2;

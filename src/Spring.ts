@@ -31,7 +31,7 @@ export class Spring extends DrawnObjectBase {
         //=== YOUR CODE HERE ===
         if ((v < this.wConfig.max) && (v > this.wConfig.min)){
             this._wConfig = SizeConfig.elastic(v);
-            // this._w = v;
+            this._w = v;
             console.log("v: ",v);
             console.log("w: ",this.w);
             console.log("this: ",this);
@@ -43,7 +43,7 @@ export class Spring extends DrawnObjectBase {
     public override set h(v : number) {
         //=== YOUR CODE HERE ===
         this._hConfig = SizeConfig.elastic(v);
-        // this._h = v;
+        this._h = v;
         this.damageAll();
     }
 

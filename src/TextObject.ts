@@ -109,6 +109,37 @@ export class TextObject extends DrawnObjectBase {
     public get color() : string | number {return this._color;}
     public set color(v : string | number) {this._color = v;}
 
+
+    public checkEditedW = false;
+    public checkEditedH = false;
+    // Override w & h setters so they enforce fixed size
+    public override get w() {return super.w;}  
+    public override set w(v : number) {
+        //=== YOUR CODE HERE ===
+        if (this.checkEditedW){
+            return
+        }
+        this.checkEditedW = true;
+        this._wConfig = SizeConfig.fixed(v);
+        this._w = v;
+        this.damageAll();
+
+
+    }
+
+    public override get h() {return super.h;}
+    public override set h(v : number) {
+        //=== YOUR CODE HERE ===
+        if (this.checkEditedH){
+            return
+        }
+        this.checkEditedH = true;
+        this._hConfig = SizeConfig.fixed(v);
+        this._h = v;
+        this.damageAll();
+       
+    }
+
     //-------------------------------------------------------------------
     // Methods
     //-------------------------------------------------------------------
@@ -116,6 +147,8 @@ export class TextObject extends DrawnObjectBase {
     // Recalculate the size of this object based on the size of the text
     protected _recalcSize(ctx? : DrawContext) : void {
         //=== YOUR CODE HERE ===
+        console.log("text ctx:",ctx);
+        console.log("text this:", this)
         // set the wideth and height with padding
         let size = this._measureText(this.text, this.font, ctx);
         this.w = size.w + this.padding.w * 2;
@@ -151,7 +184,7 @@ export class TextObject extends DrawnObjectBase {
             //=== YOUR CODE HERE ===
             ctx.font = this.font;
             ctx.fillStyle = clr;
-            
+
             let size = this._measureText(this.text, this.font, ctx);
             if (this._renderType === 'fill') {
                 ctx.fillText(this._text, 0, size.baseln);
