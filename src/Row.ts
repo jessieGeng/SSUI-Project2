@@ -49,7 +49,7 @@ export class Row extends Group {
     protected _hJustification : HJust = 'top';
     public get hJustification() {return this._hJustification;}
     public set hJustification(v : HJust) {
-        if (!(v === this._hJustification)) {
+        if (v !== this._hJustification) {
             this._hJustification = v;
             this.damageAll();  // we have damaged our layout...
         }
@@ -60,9 +60,9 @@ export class Row extends Group {
     // Override w setter so it enforces fixed size
     public override get w() {return super.w;}
     public override set w(v : number) {
-        if (!(v === this._w)) {
+        if (v !== this._w) {
             // damage at old size
-            // this.damageAll();
+            this.damageAll();
             this._w = v;
             this._wConfig = SizeConfig.fixed(v);
             // damage at new size
@@ -101,20 +101,20 @@ export class Row extends Group {
 
         for (let child of this.children) {
             // sum up the width configurations
-            minW += child.wConfig.min;
-            naturalW += child.wConfig.nat;
-            maxW += child.wConfig.max;
+            minW += child.minW;
+            naturalW += child.naturalW;
+            maxW += child.maxW;
             // find max value of child height
-            minH = Math.max(minH, child.hConfig.min);
-            naturalH = Math.max(naturalH, child.hConfig.nat);
-            maxH = Math.max(maxH, child.hConfig.max);
+            minH = Math.max(this.minH, child.minH);
+            naturalH = Math.max(this.naturalH, child.naturalH);
+            maxH = Math.max(this.maxH, child.maxH);
         }
-        this.minW = minW;
-        this.naturalW = naturalW;
-        this.maxW = maxW;
-        this.minH = minH;
-        this.naturalH = naturalH;
-        this.maxH = maxH;
+        // this.minW = minW;
+        // this.naturalW = naturalW;
+        // this.maxW = maxW;
+        // this.minH = minH;
+        // this.naturalH = naturalH;
+        // this.maxH = maxH;
 
         // Set configurations based on collected values
         this.hConfig = new SizeConfig(this.minH, this.naturalH, this.maxH);
@@ -214,20 +214,17 @@ export class Row extends Group {
 
         //=== YOUR CODE HERE ===
         for (let child of this.children) {
-            console.log("compression child:", child)
             // count number of springs
             if (child instanceof Spring) {
                 numSprings += 1;
             }else{
                 // if not a spring, sum up compressable space
-                natSum += child.wConfig.nat;
-                let compr = child.wConfig.nat - child.wConfig.min;
+                natSum += child.naturalW;
+                let compr = child.naturalW - child.minW;
                 availCompr += compr;
-                
             }
             
         }
-        console.log("availCompr:", availCompr)
 
         return [natSum, availCompr, numSprings];
     }
@@ -246,16 +243,13 @@ export class Row extends Group {
         }
         // calculate average excess for each spring
         let eachExcess = excess / numSprings;
-        console.log("expand excess:", excess)
         for (let child of this.children) {
-            
             // Adjust the width of each spring
             if (child instanceof Spring) {
-                
                 child.w += eachExcess;
             }
         }
-        // this.damageAll();
+        this.damageAll();
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -280,12 +274,12 @@ export class Row extends Group {
                 continue;
             }
             // calculate the fraction of shortfall should be assigned for this child
-            let compr = child.wConfig.nat - child.wConfig.min;
+            let compr = child.naturalW - child.minW;
             let fraction = compr / availCompr;
             // make sure the width cannot fall lower than the minimum
-            child.w = Math.max(child.wConfig.min, child.wConfig.nat - fraction * shortfall);
+            child.w = Math.max(child.minW, child.naturalW - fraction * shortfall);
         }
-        // this.damageAll()
+        this.damageAll()
 }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
