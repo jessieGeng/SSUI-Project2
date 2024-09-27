@@ -134,7 +134,7 @@ export class DrawnObjectBase {
     }
     get x() { return this._x; }
     set x(v) {
-        if (v !== this._x) {
+        if (!(v === this._x)) {
             // don't forget to declare damage whenever something changes
             // that could affect the display
             //===YOUR CODE HERE ===
@@ -145,7 +145,7 @@ export class DrawnObjectBase {
     get y() { return this._y; }
     set y(v) {
         //===YOUR CODE HERE ===
-        if (v !== this._y) {
+        if (!(v === this._y)) {
             this._y = v;
             this.damageAll();
         }
@@ -161,7 +161,7 @@ export class DrawnObjectBase {
     get w() { return this._w; }
     set w(v) {
         //===YOUR CODE HERE ===
-        if (v !== this._w) {
+        if (!(v === this._w)) {
             this._w = v;
             this.damageAll();
         }
@@ -169,7 +169,7 @@ export class DrawnObjectBase {
     get wConfig() { return this._wConfig; }
     set wConfig(v) {
         //===YOUR CODE HERE ===
-        if (v !== this._wConfig) {
+        if (!(v === this._wConfig)) {
             this._wConfig = v;
             this.damageAll();
         }
@@ -191,7 +191,7 @@ export class DrawnObjectBase {
     get h() { return this._h; }
     set h(v) {
         //===YOUR CODE HERE ===
-        if (v !== this._h) {
+        if (!(v === this._h)) {
             this._h = v;
             this.damageAll();
         }
@@ -199,7 +199,7 @@ export class DrawnObjectBase {
     get hConfig() { return this._hConfig; }
     set hConfig(v) {
         //===YOUR CODE HERE ===
-        if (v !== this._hConfig) {
+        if (!(v === this._hConfig)) {
             this._hConfig = v;
             this.damageAll();
         }
@@ -227,7 +227,7 @@ export class DrawnObjectBase {
     get visible() { return this._visible; }
     set visible(v) {
         //===YOUR CODE HERE ===
-        if (v !== this._visible) {
+        if (!(v === this._visible)) {
             this._visible = v;
             this.damageAll();
         }

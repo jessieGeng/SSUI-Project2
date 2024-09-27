@@ -39,7 +39,7 @@ export class Row extends Group {
     }
     get hJustification() { return this._hJustification; }
     set hJustification(v) {
-        if (v !== this._hJustification) {
+        if (!(v === this._hJustification)) {
             this._hJustification = v;
             this.damageAll(); // we have damaged our layout...
         }
@@ -48,7 +48,7 @@ export class Row extends Group {
     // Override w setter so it enforces fixed size
     get w() { return super.w; }
     set w(v) {
-        if (v !== this._w) {
+        if (!(v === this._w)) {
             // damage at old size
             this.damageAll();
             this._w = v;

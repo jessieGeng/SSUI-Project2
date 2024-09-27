@@ -107,7 +107,7 @@ export class DrawnObjectBase {
     protected _x : number = 0;
     public get x() : number {return this._x;}  
     public set x(v : number) {
-        if (v !== this._x) {
+        if (!(v === this._x)) {
 
              // don't forget to declare damage whenever something changes
              // that could affect the display
@@ -124,7 +124,7 @@ export class DrawnObjectBase {
     public get y() : number {return this._y;}
     public set y(v : number) {
         //===YOUR CODE HERE ===
-        if (v !== this._y) {
+        if (!(v === this._y)) {
             this._y = v
             this.damageAll();
         }
@@ -146,7 +146,7 @@ export class DrawnObjectBase {
     public get w() : number {return this._w;}
     public set w(v : number) {
             //===YOUR CODE HERE ===
-            if (v !== this._w) {
+            if (!(v === this._w)) {
                 this._w = v;
                 this.damageAll();
             }
@@ -159,7 +159,7 @@ export class DrawnObjectBase {
     public get wConfig() : SizeConfigLiteral {return this._wConfig;}
     public set wConfig(v : SizeConfigLiteral) {
         //===YOUR CODE HERE ===
-        if (v !== this._wConfig) {
+        if (!(v === this._wConfig)) {
             this._wConfig = v
             this.damageAll();
         }
@@ -188,7 +188,7 @@ export class DrawnObjectBase {
     public get h() : number {return this._h;}
     public set h(v : number) {
         //===YOUR CODE HERE ===
-        if (v !== this._h) {
+        if (!(v === this._h)) {
             this._h = v
             this.damageAll();
         }
@@ -201,7 +201,7 @@ export class DrawnObjectBase {
     public get hConfig() : SizeConfigLiteral {return this._hConfig;}
     public set hConfig(v : SizeConfigLiteral) {
         //===YOUR CODE HERE ===
-        if (v !== this._hConfig) {
+        if (!(v === this._hConfig)) {
             this._hConfig = v
             this.damageAll();
         }
@@ -238,7 +238,7 @@ export class DrawnObjectBase {
     public get visible() : boolean {return this._visible;}
     public set visible(v : boolean) {
             //===YOUR CODE HERE ===
-            if (v !== this._visible) {
+            if (!(v === this._visible)) {
                 this._visible = v;
                 this.damageAll();
             }

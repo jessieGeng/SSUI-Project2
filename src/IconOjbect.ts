@@ -87,7 +87,7 @@ export class IconObject extends DrawnObjectBase {
     public get resizesImage() {return this._resizesImage;}
     public set resizesImage(v : boolean) {
         //=== YOUR CODE HERE ===
-        if (v !== this._resizesImage) {
+        if (!(v === this._resizesImage)) {
             this._resizesImage = v;
             this._resize();
             this.damageAll();

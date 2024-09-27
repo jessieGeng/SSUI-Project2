@@ -50,7 +50,7 @@ export class Column extends Group {
     protected _wJustification : WJust = 'left';
     public get wJustification() {return this._wJustification;}
     public set wJustification(v : WJust) {
-        if (v !== this._wJustification) {
+        if (!(v === this._wJustification)) {
             this._wJustification = v;
             this.damageAll();  // we have damaged our layout...
         }
@@ -61,7 +61,7 @@ export class Column extends Group {
     // Override h setter so it enforces fixed size
     public override get h() {return super.h;}
     public override set h(v : number) {
-        if (v !== this._h) {
+        if (!(v === this._h)) {
             // damage at old size
             this.damageAll();
             this._h = v;
