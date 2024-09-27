@@ -93,6 +93,7 @@ export class Column extends Group {
     // Our height is set to the height determined by stacking our children vertically.
     protected override _doLocalSizing() : void {
         //===YOUR CODE HERE ===
+        // initialize values
         let minW = 0;
         let naturalW = 0;
         let maxW = 0;
@@ -102,15 +103,14 @@ export class Column extends Group {
 
         for (let child of this.children){
             console.log("column child:", child);
-    
             // sum up the height configurations
             minH += child.minH;
             naturalH += child.naturalH;
             maxH += child.maxH;
             // find max value of child width
-            minW = Math.max(this.minW, child.minW);
-            naturalW = Math.max(this.naturalW, child.naturalW);
-            maxW = Math.max(this.maxW, child.maxW);
+            minW = Math.max(minW, child.minW);
+            naturalW = Math.max(naturalW, child.naturalW);
+            maxW = Math.max(maxW, child.maxW);
         }
         // this.minW = minW;
         // this.naturalW = naturalW;
@@ -201,12 +201,16 @@ export class Column extends Group {
         let numSprings = 0; 
 
         //===YOUR CODE HERE ===
+        // iterate through all children
         for (let child of this.children) {
+            // if the child is a spring, add count - how many springs we have
             if (child instanceof Spring){
                 numSprings += 1
                 continue;
             }
+            // sum up the natural size of all our non-spring children
             natSum += child.naturalH;
+            // - how much non-spring objects can compress (nat-min) total
             let compr = child.naturalH - child.minH;
             availCompr += compr;
         }
@@ -222,7 +226,7 @@ export class Column extends Group {
     // the space at the bottom of the column as a fallback strategy).
     protected _expandChildSprings(excess : number, numSprings : number) : void {
         //===YOUR CODE HERE ===
-        // if tehre's no springs
+        // if tehre's no springs, skip
         if (numSprings == 0){
             return;
         }
@@ -307,12 +311,14 @@ export class Column extends Group {
         
             //=== YOUR CODE HERE ===
             switch(this.wJustification){
+                // if left, we start from x = 0 position
                 case 'left':
                     child.x = 0;
                     break;
                 case 'center':
                     child.x = this.w/2 - child.w/2
                     break;
+                // if at right, remember to include the width of the child
                 case 'right':
                     child.x = this.w - child.w;
                     break;

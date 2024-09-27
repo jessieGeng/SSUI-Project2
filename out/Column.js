@@ -78,6 +78,7 @@ export class Column extends Group {
     // Our height is set to the height determined by stacking our children vertically.
     _doLocalSizing() {
         //===YOUR CODE HERE ===
+        // initialize values
         let minW = 0;
         let naturalW = 0;
         let maxW = 0;
@@ -91,9 +92,9 @@ export class Column extends Group {
             naturalH += child.naturalH;
             maxH += child.maxH;
             // find max value of child width
-            minW = Math.max(this.minW, child.minW);
-            naturalW = Math.max(this.naturalW, child.naturalW);
-            maxW = Math.max(this.maxW, child.maxW);
+            minW = Math.max(minW, child.minW);
+            naturalW = Math.max(naturalW, child.naturalW);
+            maxW = Math.max(maxW, child.maxW);
         }
         // this.minW = minW;
         // this.naturalW = naturalW;
@@ -173,12 +174,16 @@ export class Column extends Group {
         let availCompr = 0;
         let numSprings = 0;
         //===YOUR CODE HERE ===
+        // iterate through all children
         for (let child of this.children) {
+            // if the child is a spring, add count - how many springs we have
             if (child instanceof Spring) {
                 numSprings += 1;
                 continue;
             }
+            // sum up the natural size of all our non-spring children
             natSum += child.naturalH;
+            // - how much non-spring objects can compress (nat-min) total
             let compr = child.naturalH - child.minH;
             availCompr += compr;
         }
@@ -191,7 +196,7 @@ export class Column extends Group {
     // the space at the bottom of the column as a fallback strategy).
     _expandChildSprings(excess, numSprings) {
         //===YOUR CODE HERE ===
-        // if tehre's no springs
+        // if tehre's no springs, skip
         if (numSprings == 0) {
             return;
         }
@@ -266,12 +271,14 @@ export class Column extends Group {
             // apply our justification setting for the horizontal
             //=== YOUR CODE HERE ===
             switch (this.wJustification) {
+                // if left, we start from x = 0 position
                 case 'left':
                     child.x = 0;
                     break;
                 case 'center':
                     child.x = this.w / 2 - child.w / 2;
                     break;
+                // if at right, remember to include the width of the child
                 case 'right':
                     child.x = this.w - child.w;
                     break;

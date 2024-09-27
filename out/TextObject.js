@@ -13,6 +13,7 @@ export class TextObject extends DrawnObjectBase {
         // silently turn into 'black' or be ignored if they are not understood by the 
         // underlying JavaScript implementation.
         this._color = 'black';
+        // check if the w and h value of text is already set
         this.checkEditedW = false;
         this.checkEditedH = false;
         this._text = text;
@@ -27,25 +28,34 @@ export class TextObject extends DrawnObjectBase {
     get text() { return this._text; }
     set text(v) {
         //=== YOUR CODE HERE ===
-        this._text = v;
-        // this._recalcSize();
-        // this.damageAll();
+        if (!(this._text === v)) {
+            // update text, and may need to recalc size and redraw
+            this._text = v;
+            this._recalcSize();
+            this.damageAll();
+        }
     }
     get font() { return this._font; }
     set font(v) {
         //=== YOUR CODE HERE ===
-        this._font = v;
-        // this._recalcSize();
-        // this.damageAll();
+        if (!(this._font === v)) {
+            // update font, and may need to recalc size and redraw
+            this._font = v;
+            this._recalcSize();
+            this.damageAll();
+        }
     }
     get padding() { return this._padding; }
     set padding(v) {
         if (typeof v === 'number')
             v = { w: v, h: v };
         //=== YOUR CODE HERE ===
-        this._padding = v;
-        // this._recalcSize();
-        // this.damageAll();
+        if (!(this._padding === v)) {
+            // update font, and may need to recalc size and redraw
+            this._padding = v;
+            this._recalcSize();
+            this.damageAll();
+        }
     }
     get renderType() { return this._renderType; }
     set rederType(v) { this._renderType = v; }
@@ -54,10 +64,11 @@ export class TextObject extends DrawnObjectBase {
     // Override w & h setters so they enforce fixed size
     get w() { return super.w; }
     set w(v) {
-        //=== YOUR CODE HERE ===
+        // if set once, we no longer change it --non-resizable
         if (this.checkEditedW) {
             return;
         }
+        // else, we set the value for w
         this.checkEditedW = true;
         this._wConfig = SizeConfig.fixed(v);
         this._w = v;
@@ -65,10 +76,11 @@ export class TextObject extends DrawnObjectBase {
     }
     get h() { return super.h; }
     set h(v) {
-        //=== YOUR CODE HERE ===
+        // if set once, we no longer change it--non-resizable
         if (this.checkEditedH) {
             return;
         }
+        // else, we set the value for h
         this.checkEditedH = true;
         this._hConfig = SizeConfig.fixed(v);
         this._h = v;
@@ -80,8 +92,6 @@ export class TextObject extends DrawnObjectBase {
     // Recalculate the size of this object based on the size of the text
     _recalcSize(ctx) {
         //=== YOUR CODE HERE ===
-        console.log("text ctx:", ctx);
-        console.log("text this:", this);
         // set the wideth and height with padding
         let size = this._measureText(this.text, this.font, ctx);
         this.w = size.w + this.padding.w * 2;
@@ -110,13 +120,17 @@ export class TextObject extends DrawnObjectBase {
                 clr = this.color.toString();
             }
             //=== YOUR CODE HERE ===
+            // draw with the setted font and color
             ctx.font = this.font;
             ctx.fillStyle = clr;
+            // we need to draw align with baseline
             let size = this._measureText(this.text, this.font, ctx);
             if (this._renderType === 'fill') {
+                // if we need to fill
                 ctx.fillText(this._text, 0, size.baseln);
             }
             else {
+                // if not fill
                 ctx.strokeText(this._text, 0, size.baseln);
             }
         }

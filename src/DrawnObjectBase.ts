@@ -113,6 +113,7 @@ export class DrawnObjectBase {
              // that could affect the display
 
             //===YOUR CODE HERE ===
+            // set x to input, and redraw
             this._x = v
             this.damageAll();
         }
@@ -124,6 +125,7 @@ export class DrawnObjectBase {
     public get y() : number {return this._y;}
     public set y(v : number) {
         //===YOUR CODE HERE ===
+        // if changed, set y to input, and redraw
         if (!(v === this._y)) {
             this._y = v
             this.damageAll();
@@ -146,6 +148,7 @@ export class DrawnObjectBase {
     public get w() : number {return this._w;}
     public set w(v : number) {
             //===YOUR CODE HERE ===
+            // if changed, set w to input, and redraw
             if (!(v === this._w)) {
                 this._w = v;
                 this.damageAll();
@@ -159,6 +162,7 @@ export class DrawnObjectBase {
     public get wConfig() : SizeConfigLiteral {return this._wConfig;}
     public set wConfig(v : SizeConfigLiteral) {
         //===YOUR CODE HERE ===
+        // if changed, set wConfig to input, and redraw
         if (!(v === this._wConfig)) {
             this._wConfig = v
             this.damageAll();
@@ -188,6 +192,7 @@ export class DrawnObjectBase {
     public get h() : number {return this._h;}
     public set h(v : number) {
         //===YOUR CODE HERE ===
+        // if changed, set h to input, and redraw
         if (!(v === this._h)) {
             this._h = v
             this.damageAll();
@@ -201,6 +206,7 @@ export class DrawnObjectBase {
     public get hConfig() : SizeConfigLiteral {return this._hConfig;}
     public set hConfig(v : SizeConfigLiteral) {
         //===YOUR CODE HERE ===
+        // if changed, set hConfig to input, and redraw
         if (!(v === this._hConfig)) {
             this._hConfig = v
             this.damageAll();
@@ -238,6 +244,7 @@ export class DrawnObjectBase {
     public get visible() : boolean {return this._visible;}
     public set visible(v : boolean) {
             //===YOUR CODE HERE ===
+            // if changed, set vsibility to input, and redraw
             if (!(v === this._visible)) {
                 this._visible = v;
                 this.damageAll();
@@ -467,7 +474,6 @@ export class DrawnObjectBase {
                      clipx : number, clipy : number, clipw : number, cliph : number) 
     {
         //===YOUR CODE HERE ===
-        // ctx.save();
         // draw the new clipping rectangle
         ctx.beginPath();
         ctx.rect(clipx, clipy, clipw, cliph);
@@ -701,7 +707,7 @@ export class DrawnObjectBase {
                                wv : number, hv: number) : void 
     {
             //===YOUR CODE HERE ===
-            // translate to local coordinates
+            // translate to current coordinates
             let localx = xInChildCoords + child.x;
             let localy = yInChildCoords + child.y;
             // limit within the bound

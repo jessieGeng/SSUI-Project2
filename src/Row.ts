@@ -92,6 +92,7 @@ export class Row extends Group {
     // Our width is set to the width determined by stacking our children horizontally.
     protected override _doLocalSizing() : void {
         //=== YOUR CODE HERE ===max};
+        // initialize values
         let minW = 0;
         let naturalW = 0;
         let maxW = 0;
@@ -105,9 +106,9 @@ export class Row extends Group {
             naturalW += child.naturalW;
             maxW += child.maxW;
             // find max value of child height
-            minH = Math.max(this.minH, child.minH);
-            naturalH = Math.max(this.naturalH, child.naturalH);
-            maxH = Math.max(this.maxH, child.maxH);
+            minH = Math.max(minH, child.minH);
+            naturalH = Math.max(naturalH, child.naturalH);
+            maxH = Math.max(maxH, child.maxH);
         }
         // this.minW = minW;
         // this.naturalW = naturalW;
@@ -120,35 +121,7 @@ export class Row extends Group {
         this.hConfig = new SizeConfig(this.minH, this.naturalH, this.maxH);
         this.wConfig = new SizeConfig(this.minW, this.naturalW, this.maxW);
 
-        // for (let child of this.children) {
-        //     if (child instanceof Spring){
-        //         continue;
-        //     }
-        //     // sum up the width configurations
-        //     this.minW += child.minW;
-        //     this.naturalW += child.naturalW;
-        //     this.maxW += child.maxW;
-        //     // find max value of child height
-        //     this.minH = Math.max(this.minH, child.minH);
-        //     this.naturalH = Math.max(this.naturalH, child.naturalH);
-        //     this.maxH = Math.max(this.maxH, child.maxH);
-        // }
-        // // set configuration
-        // this.hConfig = new SizeConfig (
-        //     this.minH,
-        //     this.naturalH,
-        //     this.maxH
-        // );
-        // this.wConfig = new SizeConfig (
-        //     this.minW,
-        //     this.naturalW,
-        //     this.maxW
-        // );
-        // set the current size to natural size
-        // this.w = this.naturalW;
-        // this.h = this.naturalH;
-        // this.damageAll();
-
+        
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -218,8 +191,9 @@ export class Row extends Group {
             if (child instanceof Spring) {
                 numSprings += 1;
             }else{
-                // if not a spring, sum up compressable space
+                // sum up the natural size of all our non-spring children
                 natSum += child.naturalW;
+                // - how much non-spring objects can compress (nat-min) total
                 let compr = child.naturalW - child.minW;
                 availCompr += compr;
             }
@@ -322,12 +296,14 @@ export class Row extends Group {
 
             //=== YOUR CODE HERE ===
             switch (this.hJustification) {
+                // if top, we start from y = 0 position
                 case 'top':
                     child.y = 0;
                     break;
                 case 'center':
                     child.y = this.h / 2 - child.h / 2;
                     break;
+                // if at bottom, remember to include the height of the child
                 case 'bottom':
                     child.y = this.h - child.h;
                     break;

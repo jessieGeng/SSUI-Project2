@@ -98,6 +98,7 @@ export class TopObject extends DrawnObjectBase {
     // For this object we clear the canvas behind the children that we draw
     protected override _drawSelfOnly(ctx: CanvasRenderingContext2D): void {
         //=== YOUR CODE HERE ===
+        // as described, clear the canvas
         ctx.clearRect(0,0, this.w, this.h);
 
 
@@ -166,13 +167,12 @@ export class TopObject extends DrawnObjectBase {
                 // clip to our bounds
                 
                 //=== YOUR CODE HERE ==
-                this.debugString();
+                // clip to our bounds
                 this.applyClip(this.canvasContext, this._x,this._y, this.w, this.h);
                 
-
-                // within our bounds clip to just the damaged region
                 
                 //=== YOUR CODE HERE ===
+                // within our bounds clip to just the damaged region
                 this.applyClip(this.canvasContext, this._damageRectX, this._damageRectY, this._damageRectW, this._damageRectH);
 
                 // after this we will no longer be damaged, so reset our damage tracking
@@ -181,9 +181,9 @@ export class TopObject extends DrawnObjectBase {
                 this._damageRectW = this.w;
                 this._damageRectH = this.h;
 
-                // do the actual drawing from here down the tree
                 
                 //=== YOUR CODE HERE ===
+                // / do the actual drawing from here down the tree
                 this.draw(this.canvasContext);
 
             } catch(err) {
@@ -217,10 +217,12 @@ export class TopObject extends DrawnObjectBase {
     // damage instead of passing it up the tree (since there is no up  from here).
     public override damageArea(xv: number, yv: number, wv: number, hv: number): void {
         //=== YOUR CODE HERE ===
+        // set the damage area coordinates to what gived
         this._damageRectX = xv;
         this._damageRectY = yv;
         this._damageRectW = wv;
         this._damageRectH = hv;
+        // flag to notify need redraw
         this._damaged = true;
     }
     

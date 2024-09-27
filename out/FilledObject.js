@@ -24,14 +24,18 @@ export class FilledObject extends DrawnObjectBase {
     get w() { return super.w; }
     set w(v) {
         //=== YOUR CODE HERE ===
+        // set wConfig to be non-resizable
         this._wConfig = SizeConfig.fixed(v);
+        // set w to be new value
         this._w = v;
         this.damageAll();
     }
     get h() { return super.h; }
     set h(v) {
         //=== YOUR CODE HERE ===
+        // set hConfig to be non-resizable
         this._hConfig = SizeConfig.fixed(v);
+        // set h to be new value
         this._h = v;
         this.damageAll();
     }
@@ -58,6 +62,7 @@ export class FilledObject extends DrawnObjectBase {
             ctx.fillStyle = this.color.toString();
         }
         //=== YOUR CODE HERE ===
+        // draw the rectangle
         ctx.fillRect(0, 0, this.w, this.h);
         // this.damageAll();
     }

@@ -36,9 +36,13 @@ export class TextObject extends DrawnObjectBase {
     public get text() {return this._text;}
     public set text(v : string) {
         //=== YOUR CODE HERE ===
-        this._text = v;
-        // this._recalcSize();
-        // this.damageAll();
+        if (!(this._text === v)){
+            // update text, and may need to recalc size and redraw
+            this._text = v;
+            this._recalcSize();
+            this.damageAll();
+        }
+        
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -71,9 +75,12 @@ export class TextObject extends DrawnObjectBase {
     public get font() {return this._font;}
     public set font(v : string) {
         //=== YOUR CODE HERE ===
-        this._font = v;
-        // this._recalcSize();
-        // this.damageAll();
+        if (!(this._font === v)){
+            // update font, and may need to recalc size and redraw
+            this._font = v;
+            this._recalcSize();
+            this.damageAll();
+        }
     }  
     
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -86,9 +93,12 @@ export class TextObject extends DrawnObjectBase {
     public set padding(v : SizeLiteral | number) {
         if (typeof v === 'number') v = {w:v, h:v};
         //=== YOUR CODE HERE ===
-        this._padding = v;
-        // this._recalcSize();
-        // this.damageAll();
+        if (!(this._padding === v)){
+            // update font, and may need to recalc size and redraw
+            this._padding = v;
+            this._recalcSize();
+            this.damageAll();
+        }
     }
     
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -109,16 +119,17 @@ export class TextObject extends DrawnObjectBase {
     public get color() : string | number {return this._color;}
     public set color(v : string | number) {this._color = v;}
 
-
+    // check if the w and h value of text is already set
     public checkEditedW = false;
     public checkEditedH = false;
     // Override w & h setters so they enforce fixed size
     public override get w() {return super.w;}  
     public override set w(v : number) {
-        //=== YOUR CODE HERE ===
+        // if set once, we no longer change it --non-resizable
         if (this.checkEditedW){
             return
         }
+        // else, we set the value for w
         this.checkEditedW = true;
         this._wConfig = SizeConfig.fixed(v);
         this._w = v;
@@ -129,10 +140,11 @@ export class TextObject extends DrawnObjectBase {
 
     public override get h() {return super.h;}
     public override set h(v : number) {
-        //=== YOUR CODE HERE ===
+        // if set once, we no longer change it--non-resizable
         if (this.checkEditedH){
             return
         }
+        // else, we set the value for h
         this.checkEditedH = true;
         this._hConfig = SizeConfig.fixed(v);
         this._h = v;
@@ -147,13 +159,10 @@ export class TextObject extends DrawnObjectBase {
     // Recalculate the size of this object based on the size of the text
     protected _recalcSize(ctx? : DrawContext) : void {
         //=== YOUR CODE HERE ===
-        console.log("text ctx:",ctx);
-        console.log("text this:", this)
         // set the wideth and height with padding
         let size = this._measureText(this.text, this.font, ctx);
         this.w = size.w + this.padding.w * 2;
         this.h = size.h + this.padding.h * 2;
-        
 
         // set the size configuration to be fixed at that size
         this.wConfig = SizeConfig.fixed(this.w);
@@ -182,13 +191,16 @@ export class TextObject extends DrawnObjectBase {
             }
         
             //=== YOUR CODE HERE ===
+            // draw with the setted font and color
             ctx.font = this.font;
             ctx.fillStyle = clr;
-
+            // we need to draw align with baseline
             let size = this._measureText(this.text, this.font, ctx);
             if (this._renderType === 'fill') {
+                // if we need to fill
                 ctx.fillText(this._text, 0, size.baseln);
             } else {
+                // if not fill
                 ctx.strokeText(this._text,0, size.baseln);
             }
 

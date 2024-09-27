@@ -138,6 +138,7 @@ export class DrawnObjectBase {
             // don't forget to declare damage whenever something changes
             // that could affect the display
             //===YOUR CODE HERE ===
+            // set x to input, and redraw
             this._x = v;
             this.damageAll();
         }
@@ -145,6 +146,7 @@ export class DrawnObjectBase {
     get y() { return this._y; }
     set y(v) {
         //===YOUR CODE HERE ===
+        // if changed, set y to input, and redraw
         if (!(v === this._y)) {
             this._y = v;
             this.damageAll();
@@ -161,6 +163,7 @@ export class DrawnObjectBase {
     get w() { return this._w; }
     set w(v) {
         //===YOUR CODE HERE ===
+        // if changed, set w to input, and redraw
         if (!(v === this._w)) {
             this._w = v;
             this.damageAll();
@@ -169,6 +172,7 @@ export class DrawnObjectBase {
     get wConfig() { return this._wConfig; }
     set wConfig(v) {
         //===YOUR CODE HERE ===
+        // if changed, set wConfig to input, and redraw
         if (!(v === this._wConfig)) {
             this._wConfig = v;
             this.damageAll();
@@ -191,6 +195,7 @@ export class DrawnObjectBase {
     get h() { return this._h; }
     set h(v) {
         //===YOUR CODE HERE ===
+        // if changed, set h to input, and redraw
         if (!(v === this._h)) {
             this._h = v;
             this.damageAll();
@@ -199,6 +204,7 @@ export class DrawnObjectBase {
     get hConfig() { return this._hConfig; }
     set hConfig(v) {
         //===YOUR CODE HERE ===
+        // if changed, set hConfig to input, and redraw
         if (!(v === this._hConfig)) {
             this._hConfig = v;
             this.damageAll();
@@ -227,6 +233,7 @@ export class DrawnObjectBase {
     get visible() { return this._visible; }
     set visible(v) {
         //===YOUR CODE HERE ===
+        // if changed, set vsibility to input, and redraw
         if (!(v === this._visible)) {
             this._visible = v;
             this.damageAll();
@@ -409,7 +416,6 @@ export class DrawnObjectBase {
     // area and the given rectangle.
     applyClip(ctx, clipx, clipy, clipw, cliph) {
         //===YOUR CODE HERE ===
-        // ctx.save();
         // draw the new clipping rectangle
         ctx.beginPath();
         ctx.rect(clipx, clipy, clipw, cliph);
@@ -613,7 +619,7 @@ export class DrawnObjectBase {
     // limited to our bounds by clipping.
     _damageFromChild(child, xInChildCoords, yInChildCoords, wv, hv) {
         //===YOUR CODE HERE ===
-        // translate to local coordinates
+        // translate to current coordinates
         let localx = xInChildCoords + child.x;
         let localy = yInChildCoords + child.y;
         // limit within the bound

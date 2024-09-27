@@ -88,6 +88,8 @@ export class IconObject extends DrawnObjectBase {
     public set resizesImage(v : boolean) {
         //=== YOUR CODE HERE ===
         if (!(v === this._resizesImage)) {
+            // if we change whether the image should be resized, 
+            // we should resize it and redraw
             this._resizesImage = v;
             this._resize();
             this.damageAll();
@@ -101,7 +103,9 @@ export class IconObject extends DrawnObjectBase {
     // If our size is determined by the image, resize us to match (otherwise do nothing).
     protected _resize() {
         //=== YOUR CODE HERE ===
+        // if the size is determined by image and the image exists
         if((!this.resizesImage) && (this._image) && (this._image.canvasImage)){
+            // resize our size to match the image size
             this.w = this._image.canvasImage.width;   
             this.h = this._image.canvasImage.height;   
         }
@@ -135,7 +139,7 @@ export class IconObject extends DrawnObjectBase {
 
         if (this.resizesImage) {
             //=== YOUR CODE HERE ===
-            // resize the image to the object size
+            // resize the image to our size
             ctx.drawImage(this.image.canvasImage, 0, 0, this.w, this.h);
             
             
@@ -148,7 +152,7 @@ export class IconObject extends DrawnObjectBase {
 
             // this.applyClip(ctx, 0, 0, this.w, this.h);
             
-            // do not resize, directly draw 
+            // do not resize, directly draw with the original image's size
             ctx.drawImage(this.image.canvasImage, 0, 0, this.image.canvasImage.width, this.image.canvasImage.height)
             
 
