@@ -40,6 +40,7 @@ export class Column extends Group {
     get wJustification() { return this._wJustification; }
     set wJustification(v) {
         if (v !== this._wJustification) {
+            this.damageAll();
             this._wJustification = v;
             this.damageAll(); // we have damaged our layout...
         }
@@ -229,6 +230,7 @@ export class Column extends Group {
             // make sure the height cannot fall lower than the minimum height
             child.h = Math.max(child.minH, child.naturalH - fraction * shortfall);
         }
+        this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Do the local portion of the top down pass which sets the final 

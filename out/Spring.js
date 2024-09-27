@@ -23,21 +23,33 @@ export class Spring extends DrawnObjectBase {
     get w() { return super.w; }
     set w(v) {
         //=== YOUR CODE HERE ===
-        if ((v < this.wConfig.max) && (v > this.wConfig.min)) {
-            this._wConfig = SizeConfig.elastic(v);
-            this._w = v;
-            console.log("v: ", v);
-            console.log("w: ", this.w);
-            console.log("this: ", this);
-            this.damageAll();
-        }
+        v = SizeConfig.withinConfig(v, super.wConfig);
+        super.w = v;
+        this.damageAll();
+        console.log("spring v: ", v);
+        console.log("spring w: ", this.w);
+        console.log("spring this: ", this);
+        // if ((v < this.wConfig.max) && (v > this.wConfig.min)){
+        //     // console.log("v: ",v);
+        //     // console.log("w: ",this.w);
+        //     // console.log("this: ",this);
+        //     this._wConfig = SizeConfig.elastic(v);
+        //     this._w = v;
+        //     this.damageAll();
+        // }    
     }
     get h() { return super.h; }
     set h(v) {
         //=== YOUR CODE HERE ===
-        this._hConfig = SizeConfig.elastic(v);
-        this._h = v;
+        v = SizeConfig.withinConfig(v, super.hConfig);
+        super.h = v;
         this.damageAll();
+        console.log("spring v: ", v);
+        console.log("spring h: ", this.w);
+        console.log("spring this: ", this);
+        // this._hConfig = SizeConfig.elastic(v);
+        // this._h = v;
+        // this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Override configuration setters to enforce elastic with zero natural size

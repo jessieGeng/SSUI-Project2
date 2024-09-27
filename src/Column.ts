@@ -51,6 +51,7 @@ export class Column extends Group {
     public get wJustification() {return this._wJustification;}
     public set wJustification(v : WJust) {
         if (v !== this._wJustification) {
+            this.damageAll();
             this._wJustification = v;
             this.damageAll();  // we have damaged our layout...
         }
@@ -265,6 +266,7 @@ export class Column extends Group {
             child.h = Math.max(child.minH,child.naturalH-fraction * shortfall)
 
         }
+        this.damageAll();
 }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
