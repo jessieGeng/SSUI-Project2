@@ -23,10 +23,10 @@ export class Spring extends DrawnObjectBase {
     get w() { return super.w; }
     set w(v) {
         //=== YOUR CODE HERE ===
-        if (v >= 0) {
-            super.w = v;
-        }
-        // this._w = SizeConfig.withinConfig(v, this.wConfig);
+        // if (v >= 0) {
+        //     super.w = v;
+        // }
+        this._w = SizeConfig.withinConfig(v, this.wConfig);
         // v = SizeConfig.withinConfig(v, this.wConfig);
         // this._w = v;
         // console.log("v: ",v);
@@ -38,10 +38,10 @@ export class Spring extends DrawnObjectBase {
     set h(v) {
         //=== YOUR CODE HERE ===
         // this._hConfig = SizeConfig.elastic(v);
-        if (v >= 0) {
-            super.h = v;
-        }
-        // this._h = SizeConfig.withinConfig(v, this.hConfig);
+        // if (v >= 0) {
+        //     super.h = v;
+        // }
+        this._h = SizeConfig.withinConfig(v, this.hConfig);
         // v = SizeConfig.withinConfig(v, this.hConfig);
         // this._h = v;
         // this.damageAll();

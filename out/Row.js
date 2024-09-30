@@ -102,11 +102,12 @@ export class Row extends Group {
         // this.naturalH = naturalH;
         // this.maxH = maxH;
         // Set configurations based on collected values
-        this.hConfig = new SizeConfig(minH, naturalH, maxH);
-        this.wConfig = new SizeConfig(minW, naturalW, maxW);
-        // this.w = this.naturalW;
-        // this.h = this.naturalH;
-        // this.damageAll()
+        this._hConfig = new SizeConfig(minH, naturalH, maxH);
+        this._wConfig = new SizeConfig(minW, naturalW, maxW);
+        // this line deleted makes it super elastic
+        this.w = naturalW;
+        // this.h = naturalH;
+        this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // This method adjusts the width of the children to do horizontal springs and struts 
@@ -198,7 +199,7 @@ export class Row extends Group {
                 child.w += eachExcess;
             }
         }
-        this.damageAll();
+        // this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Contract our child objects to make up the given amount of shortfall.  Springs
@@ -219,12 +220,12 @@ export class Row extends Group {
                 continue;
             }
             // calculate the fraction of shortfall should be assigned for this child
-            let compr = child.naturalW - child.minW;
+            let compr = child.wConfig.nat - child.wConfig.min;
             let fraction = compr / availCompr;
             // make sure the width cannot fall lower than the minimum
-            child.w = Math.max(child.minW, child.naturalW - fraction * shortfall);
+            child.w = Math.max(child.wConfig.min, child.wConfig.nat - fraction * shortfall);
         }
-        this.damageAll();
+        // this.damageAll()
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Do the local portion of the top down pass which sets the final 
@@ -261,7 +262,7 @@ export class Row extends Group {
             xpos += child.w;
             // apply our justification setting for the vertical
             //=== YOUR CODE HERE ===
-            switch (this.hJustification) {
+            switch (this._hJustification) {
                 // if top, we start from y = 0 position
                 case 'top':
                     child.y = 0;
@@ -277,7 +278,7 @@ export class Row extends Group {
                     child.y = 0;
             }
         }
-        this.damageAll();
+        // this.damageAll()
     }
 }
 //===================================================================
