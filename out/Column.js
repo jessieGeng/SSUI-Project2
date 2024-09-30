@@ -88,13 +88,13 @@ export class Column extends Group {
         for (let child of this.children) {
             console.log("column child:", child);
             // sum up the height configurations
-            minH += child.minH;
-            naturalH += child.naturalH;
-            maxH += child.maxH;
+            minH += child.hConfig.min;
+            naturalH += child.hConfig.nat;
+            maxH += child.hConfig.max;
             // find max value of child width
-            minW = Math.max(minW, child.minW);
-            naturalW = Math.max(naturalW, child.naturalW);
-            maxW = Math.max(maxW, child.maxW);
+            minW = Math.max(minW, child.wConfig.min);
+            naturalW = Math.max(naturalW, child.wConfig.nat);
+            maxW = Math.max(maxW, child.wConfig.max);
         }
         // this.minW = minW;
         // this.naturalW = naturalW;
@@ -104,16 +104,8 @@ export class Column extends Group {
         // this.maxH = maxH;
         console.log("column total:", this);
         // set configuration
-        this.hConfig = {
-            min: this.minH,
-            nat: this.naturalH,
-            max: this.maxH
-        };
-        this.wConfig = {
-            min: this.minW,
-            nat: this.naturalW,
-            max: this.maxW
-        };
+        this._hConfig = new SizeConfig(minH, naturalH, maxH);
+        this._wConfig = new SizeConfig(minW, naturalW, maxW);
         // set the current size to natural size
         // this.w = this.naturalW;
         // this.h = this.naturalH;

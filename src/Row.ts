@@ -102,13 +102,13 @@ export class Row extends Group {
 
         for (let child of this.children) {
             // sum up the width configurations
-            minW += child.minW;
-            naturalW += child.naturalW;
-            maxW += child.maxW;
+            minW += child.wConfig.min;
+            naturalW += child.wConfig.nat;
+            maxW += child.wConfig.max;
             // find max value of child height
-            minH = Math.max(minH, child.minH);
-            naturalH = Math.max(naturalH, child.naturalH);
-            maxH = Math.max(maxH, child.maxH);
+            minH = Math.max(minH, child.hConfig.min);
+            naturalH = Math.max(naturalH, child.hConfig.nat);
+            maxH = Math.max(maxH, child.hConfig.max);
         }
         // this.minW = minW;
         // this.naturalW = naturalW;
@@ -118,9 +118,11 @@ export class Row extends Group {
         // this.maxH = maxH;
 
         // Set configurations based on collected values
-        this.hConfig = new SizeConfig(this.minH, this.naturalH, this.maxH);
-        this.wConfig = new SizeConfig(this.minW, this.naturalW, this.maxW);
-
+        this.hConfig = new SizeConfig(minH, naturalH, maxH);
+        this.wConfig = new SizeConfig(minW, naturalW, maxW);
+        // this.w = this.naturalW;
+        // this.h = this.naturalH;
+        // this.damageAll()
         
     }
 

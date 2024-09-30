@@ -29,14 +29,18 @@ export class Spring extends DrawnObjectBase {
     public override get w() {return super.w;}  
     public override set w(v : number) {
         //=== YOUR CODE HERE ===
+        if (v >= 0) {
+            super.w = v;
+        }
+        // this._w = SizeConfig.withinConfig(v, this.wConfig);
         
-        v = SizeConfig.withinConfig(v, this.wConfig);
-        this._w = v;
+        // v = SizeConfig.withinConfig(v, this.wConfig);
+        // this._w = v;
         
-        console.log("v: ",v);
-        console.log("w: ",this.w);
-        console.log("this: ",this);
-        this.damageAll();
+        // console.log("v: ",v);
+        // console.log("w: ",this.w);
+        // console.log("this: ",this);
+        // this.damageAll();
          
     }
 
@@ -44,10 +48,16 @@ export class Spring extends DrawnObjectBase {
     public override set h(v : number) {
         //=== YOUR CODE HERE ===
         // this._hConfig = SizeConfig.elastic(v);
-        v = SizeConfig.withinConfig(v, this.hConfig);
-        this._h = v;
         
-        this.damageAll();
+        if (v >= 0) {
+            super.h = v;
+        }
+        // this._h = SizeConfig.withinConfig(v, this.hConfig);
+
+        // v = SizeConfig.withinConfig(v, this.hConfig);
+        // this._h = v;
+        
+        // this.damageAll();
     }
 
 
