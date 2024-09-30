@@ -121,7 +121,7 @@ export class Row extends Group {
         this._hConfig = new SizeConfig(minH, naturalH, maxH);
         this._wConfig = new SizeConfig(minW, naturalW, maxW);
         // this line deleted makes it super elastic
-        this.w = naturalW;
+        // this.w = naturalW;
         // this.h = naturalH;
         this.damageAll()
         

@@ -109,7 +109,7 @@ export class Column extends Group {
         // set the current size to natural size
         // this line deleted makes it super elastic
         // this.w = naturalW;
-        this.h = naturalH;
+        // this.h = naturalH;
         this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -132,6 +132,7 @@ export class Column extends Group {
         console.log("adjust excess:", excess);
         // handle positive excess and negative excess (AKA shortfall) as separate cases
         if (excess >= 0) {
+            console.log("expandChildSprings");
             this._expandChildSprings(excess, numSprings);
         }
         else { // negative excess (AKA shortfall) case
@@ -187,6 +188,7 @@ export class Column extends Group {
         }
         console.log("availCompr:", availCompr);
         console.log("natSum:", natSum);
+        console.log("this.h:", this.h);
         return [natSum, availCompr, numSprings];
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -207,7 +209,9 @@ export class Column extends Group {
         for (let child of this.children) {
             // Adjust the height of each spring
             if (child instanceof Spring) {
+                console.log("spring h before expand:", child.h);
                 child.h += eachExcess;
+                console.log("spring h after expand:", child.h);
             }
         }
         // this.damageAll()
