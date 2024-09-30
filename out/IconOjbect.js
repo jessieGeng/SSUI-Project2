@@ -89,13 +89,12 @@ export class IconObject extends DrawnObjectBase {
     // If our size is determined by the image, resize us to match (otherwise do nothing).
     _resize() {
         //=== YOUR CODE HERE ===
-        // if the size is determined by image and the image exists
+        // check if we should set our size to match the image size, and if the image exists
         if ((!this.resizesImage) && (this._image) && (this._image.canvasImage)) {
-            // resize our size to match the image size
+            // set our size (w and h) to match the image size
             this.w = this._image.canvasImage.width;
             this.h = this._image.canvasImage.height;
         }
-        this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Function that is called when our loading is complete
@@ -120,17 +119,12 @@ export class IconObject extends DrawnObjectBase {
             return;
         if (this.resizesImage) {
             //=== YOUR CODE HERE ===
-            // resize the image to our size
+            // if resizesImage is true, we should draw the image at our size
             ctx.drawImage(this.image.canvasImage, 0, 0, this.w, this.h);
         }
         else {
             //=== YOUR CODE HERE ===
-            // since we are not resizing, find the x and y coordinate to center the image in our bounded area
-            // let startx = this.w/2 - this.image.canvasImage.width/2
-            // let starty = this.h/2 - this.image.canvasImage.height/2
-            // ctx.drawImage(this.image.canvasImage, startx, starty, this.image.canvasImage.width, this.image.canvasImage.height);
-            // this.applyClip(ctx, 0, 0, this.w, this.h);
-            // do not resize, directly draw with the original image's size
+            // if we do not resize, directly draw with the original image's size
             ctx.drawImage(this.image.canvasImage, 0, 0, this.image.canvasImage.width, this.image.canvasImage.height);
         }
     }

@@ -24,20 +24,20 @@ export class FilledObject extends DrawnObjectBase {
     get w() { return super.w; }
     set w(v) {
         //=== YOUR CODE HERE ===
-        // set wConfig to be non-resizable
-        this._wConfig = SizeConfig.fixed(v);
-        // set w to be new value
-        this._w = v;
-        this.damageAll();
+        // set w to be new value if it changes
+        if (!(this._w === v)) {
+            this._w = v;
+            this.damageAll();
+        }
     }
     get h() { return super.h; }
     set h(v) {
         //=== YOUR CODE HERE ===
-        // set hConfig to be non-resizable
-        this._hConfig = SizeConfig.fixed(v);
-        // set h to be new value
-        this._h = v;
-        this.damageAll();
+        // set h to be new value if it changes
+        if (!(this._h === v)) {
+            this._h = v;
+            this.damageAll();
+        }
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Override configuration setters to enforce fixed size
@@ -64,7 +64,6 @@ export class FilledObject extends DrawnObjectBase {
         //=== YOUR CODE HERE ===
         // draw the rectangle
         ctx.fillRect(0, 0, this.w, this.h);
-        // this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Produce a human readable "tag" string for this object -- a short string which 

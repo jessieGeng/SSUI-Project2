@@ -479,6 +479,7 @@ export class DrawnObjectBase {
         ctx.rect(clipx, clipy, clipw, cliph);
         // Apply the clip
         ctx.clip();
+        ctx.closePath();
     }
 
     // Utility routine to create a new rectangular path at our bounding box.
@@ -540,15 +541,15 @@ export class DrawnObjectBase {
     // 3) reduce the clipping region of the context object so it does not include 
     //    any area outside the child's bounding box.
     protected _startChildDraw(childIndx : number, ctx: DrawContext) {
-        // 1) save full the current state of the context object
+        // save full the current state of the context object
         ctx.save();
 
         //===YOUR CODE HERE ===
         const child = this._children[childIndx];
         // apply a translation tranformation to move to the child's corrdinate system.
         ctx.translate(child.x, child.y);
-        // 3) reduce the clipping region of the context object so it does not include 
-        //    any area outside the child's bounding box.
+        // reduce the clipping region of the context object so it does not include 
+        // any area outside the child's bounding box.
         this.applyClip(ctx, 0, 0, child.w, child.h);
     }
 
@@ -707,20 +708,12 @@ export class DrawnObjectBase {
                                wv : number, hv: number) : void 
     {
             //===YOUR CODE HERE ===
-            // translate to current coordinates
+            // translate to current (parent of the child) coordinates
             let localx = xInChildCoords + child.x;
             let localy = yInChildCoords + child.y;
-            // limit within the bound
-            // find where the damage starts
-            // let damagex = Math.max(0, localx)
-            // let damagey = Math.max(0, localy)
-            // // find the effective width and height of the damage area within bound
-            // // we only want the part of the damage that is within the bounded area (within this w and h)
-            // let damagew = Math.min(this.w, damagex + wv) - damagex;
-            // let damageh = Math.min(this.h, damagey + hv) - damagey
-            // report the damage up to the tree
+
+            // report upward if this have parent
             if (this.parent){
-                // this.parent._damageFromChild(this, damagex, damagey, damagew, damageh);
                 this.parent._damageFromChild(this, localx, localy, wv, hv);
             }
             

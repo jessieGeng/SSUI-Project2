@@ -39,7 +39,7 @@ export class TextObject extends DrawnObjectBase {
     set font(v) {
         //=== YOUR CODE HERE ===
         if (!(this._font === v)) {
-            // update font, and may need to recalc size and redraw
+            // update font value, and may need to recalc size and redraw (damage)
             this._font = v;
             this._recalcSize();
             this.damageAll();
@@ -51,7 +51,7 @@ export class TextObject extends DrawnObjectBase {
             v = { w: v, h: v };
         //=== YOUR CODE HERE ===
         if (!(this._padding === v)) {
-            // update font, and may need to recalc size and redraw
+            // update padding value, and may need to recalc size and redraw (damage)
             this._padding = v;
             this._recalcSize();
             this.damageAll();
@@ -92,13 +92,14 @@ export class TextObject extends DrawnObjectBase {
     // Recalculate the size of this object based on the size of the text
     _recalcSize(ctx) {
         //=== YOUR CODE HERE ===
-        // set the wideth and height with padding
+        // set the width and height to the new value calculated from new text/font
         let size = this._measureText(this.text, this.font, ctx);
-        this.w = size.w + this.padding.w * 2;
-        this.h = size.h + this.padding.h * 2;
+        this.w = size.w;
+        this.h = size.h;
         // set the size configuration to be fixed at that size
         this.wConfig = SizeConfig.fixed(this.w);
         this.hConfig = SizeConfig.fixed(this.h);
+        // we get new size information, update
         this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -120,17 +121,17 @@ export class TextObject extends DrawnObjectBase {
                 clr = this.color.toString();
             }
             //=== YOUR CODE HERE ===
-            // draw with the setted font and color
+            // draw with the target font and color
             ctx.font = this.font;
             ctx.fillStyle = clr;
-            // we need to draw align with baseline
+            // we need to draw the text align with the drawn baseline
             let size = this._measureText(this.text, this.font, ctx);
             if (this._renderType === 'fill') {
-                // if we need to fill
+                // if we need to fill, use fill text
                 ctx.fillText(this._text, 0, size.baseln);
             }
             else {
-                // if not fill
+                // if not fill, use stroke
                 ctx.strokeText(this._text, 0, size.baseln);
             }
         }

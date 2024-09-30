@@ -23,18 +23,20 @@ export class Strut extends DrawnObjectBase {
     get w() { return super.w; }
     set w(v) {
         //=== YOUR CODE HERE ===
-        // fix the w max and min to be v, and set current value to be v
-        this._wConfig = SizeConfig.fixed(v);
-        this._w = v;
-        this.damageAll();
+        // if w changes, assign the new value, redraw (damage it)
+        if (!(v === this._w)) {
+            this._w = v;
+            this.damageAll();
+        }
     }
     get h() { return super.h; }
     set h(v) {
         //=== YOUR CODE HERE ===        
-        // fix the h max and min to be v, and set current value to be v
-        this._hConfig = SizeConfig.fixed(v);
-        this._h = v;
-        this.damageAll();
+        // if h changes, assign the new value, redraw (damage it)
+        if (!(v === this._h)) {
+            this._h = v;
+            this.damageAll();
+        }
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Override configuration setters to enforce fixed size
