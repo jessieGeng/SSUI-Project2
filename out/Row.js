@@ -78,7 +78,7 @@ export class Row extends Group {
     // Our width is set to the width determined by stacking our children horizontally.
     _doLocalSizing() {
         //=== YOUR CODE HERE ===max};
-        // initialize values
+        // initialize values for loop through childre
         let minW = 0;
         let naturalW = 0;
         let maxW = 0;
@@ -86,28 +86,18 @@ export class Row extends Group {
         let naturalH = 0;
         let maxH = 0;
         for (let child of this.children) {
-            // sum up the width configurations
+            // sum up the width configurations of children
             minW += child.wConfig.min;
             naturalW += child.wConfig.nat;
             maxW += child.wConfig.max;
-            // find max value of child height
+            // find max value of child height to fit the biggest children
             minH = Math.max(minH, child.hConfig.min);
             naturalH = Math.max(naturalH, child.hConfig.nat);
             maxH = Math.max(maxH, child.hConfig.max);
         }
-        // this.minW = minW;
-        // this.naturalW = naturalW;
-        // this.maxW = maxW;
-        // this.minH = minH;
-        // this.naturalH = naturalH;
-        // this.maxH = maxH;
         // Set configurations based on collected values
-        this._hConfig = new SizeConfig(minH, naturalH, maxH);
-        this._wConfig = new SizeConfig(minW, naturalW, maxW);
-        // this line deleted makes it super elastic
-        // this.w = naturalW;
-        // this.h = naturalH;
-        this.damageAll();
+        this._hConfig = new SizeConfig(naturalH, minH, maxH);
+        this._wConfig = new SizeConfig(naturalW, minW, maxW);
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // This method adjusts the width of the children to do horizontal springs and struts 
@@ -165,8 +155,9 @@ export class Row extends Group {
         let availCompr = 0;
         let numSprings = 0;
         //=== YOUR CODE HERE ===
+        // iterate through all children
         for (let child of this.children) {
-            // count number of springs
+            // if the child is a spring, accumulate spring count - how many springs we have
             if (child instanceof Spring) {
                 numSprings += 1;
             }
@@ -187,19 +178,18 @@ export class Row extends Group {
     // the space at the right of the row as a fallback strategy).
     _expandChildSprings(excess, numSprings) {
         //=== YOUR CODE HERE ===
-        // if tehre's no springs
+        // if tehre's no springs, no expansion for spring
         if (numSprings == 0) {
             return;
         }
-        // calculate average excess for each spring
+        // calculate average excess space assigned for each spring
         let eachExcess = excess / numSprings;
         for (let child of this.children) {
-            // Adjust the width of each spring
+            // Adjust the space (width) of each spring
             if (child instanceof Spring) {
-                child.w += eachExcess;
+                child.w = eachExcess;
             }
         }
-        // this.damageAll();
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Contract our child objects to make up the given amount of shortfall.  Springs
@@ -216,16 +206,15 @@ export class Row extends Group {
         // from the natural height of that child, to get the assigned height.
         for (let child of this.children) {
             //=== YOUR CODE HERE ===
-            if (child instanceof Spring) {
-                continue;
+            // springs are already assumed in calculating shortfall, jump
+            if (!(child instanceof Spring)) {
+                // calculate the fraction of shortfall should be assigned for this child
+                let compr = child.wConfig.nat - child.wConfig.min;
+                let fraction = compr / availCompr;
+                // make sure the width cannot fall lower than the minimum
+                child.w = Math.max(child.wConfig.min, child.wConfig.nat - fraction * shortfall);
             }
-            // calculate the fraction of shortfall should be assigned for this child
-            let compr = child.wConfig.nat - child.wConfig.min;
-            let fraction = compr / availCompr;
-            // make sure the width cannot fall lower than the minimum
-            child.w = Math.max(child.wConfig.min, child.wConfig.nat - fraction * shortfall);
         }
-        // this.damageAll()
     }
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
     // Do the local portion of the top down pass which sets the final 

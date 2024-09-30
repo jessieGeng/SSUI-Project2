@@ -32,15 +32,19 @@ export class Spring extends DrawnObjectBase {
         // if (v >= 0) {
         //     super.w = v;
         // }
-        this._w = SizeConfig.withinConfig(v, this.wConfig);
+        // this._w = SizeConfig.withinConfig(v, this.wConfig);
         
         // v = SizeConfig.withinConfig(v, this.wConfig);
+        this.damageAll();
+        if (!(v === this._w)) {
+            this._w = v;
+        }
         // this._w = v;
         
         // console.log("v: ",v);
         // console.log("w: ",this.w);
         // console.log("this: ",this);
-        // this.damageAll();
+        this.damageAll();
          
     }
 
@@ -52,12 +56,15 @@ export class Spring extends DrawnObjectBase {
         // if (v >= 0) {
         //     super.h = v;
         // }
-        this._h = SizeConfig.withinConfig(v, this.hConfig);
+        // this._h = SizeConfig.withinConfig(v, this.hConfig);
 
         // v = SizeConfig.withinConfig(v, this.hConfig);
-        // this._h = v;
+        this.damageAll();
+        if (!(v === this._h)) {
+            this._h = v;
+        }
         
-        // this.damageAll();
+        this.damageAll();
     }
 
 

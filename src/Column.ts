@@ -93,7 +93,7 @@ export class Column extends Group {
     // Our height is set to the height determined by stacking our children vertically.
     protected override _doLocalSizing() : void {
         //===YOUR CODE HERE ===
-        // initialize values
+        // initialize values for loop through childre
         let minW = 0;
         let naturalW = 0;
         let maxW = 0;
@@ -102,35 +102,20 @@ export class Column extends Group {
         let maxH = 0;
 
         for (let child of this.children){
-            console.log("column child:", child);
-            // sum up the height configurations
-            
+            // sum up the height configurations of children
             minH += child.hConfig.min;
             naturalH += child.hConfig.nat;
             maxH += child.hConfig.max;
         
-            // find max value of child width
+            // find max value of child width to fit the biggest children
             minW = Math.max(minW, child.wConfig.min);
             naturalW = Math.max(naturalW, child.wConfig.nat);
             maxW = Math.max(maxW, child.wConfig.max);
         }
-        // this.minW = minW;
-        // this.naturalW = naturalW;
-        // this.maxW = maxW;
-        // this.minH = minH;
-        // this.naturalH = naturalH;
-        // this.maxH = maxH;
         
-        console.log("column total:", this)
-
-        // set configuration
-        this._hConfig = new SizeConfig(minH, naturalH, maxH);
-        this._wConfig = new SizeConfig(minW, naturalW, maxW);
-        // set the current size to natural size
-        // this line deleted makes it super elastic
-        // this.w = naturalW;
-        // this.h = naturalH;
-        this.damageAll();
+        // we get the result, assign to the configuration of column
+        this.hConfig = new SizeConfig(naturalH, minH, maxH);
+        this.wConfig = new SizeConfig(naturalW, minW, maxW);
 
         
     }
@@ -154,15 +139,12 @@ export class Column extends Group {
         // given space allocation from our parent, determine how much vertical excess 
         // we have in comparison to our children's natural sizes 
         let excess = this.h - natSum;
-        console.log("adjust excess:", excess)
         // handle positive excess and negative excess (AKA shortfall) as separate cases
         if (excess >= 0) {
-            console.log("expandChildSprings")
             this._expandChildSprings(excess, numSprings);
         } else { // negative excess (AKA shortfall) case
             // zero out the size of all the springs
             for (let child of this.children) {
-                console.log("adjust children:", child)
                 if (child instanceof Spring) child.h = 0;
             }
 
@@ -201,24 +183,18 @@ export class Column extends Group {
         //===YOUR CODE HERE ===
         // iterate through all children
         for (let child of this.children) {
-            // if the child is a spring, add count - how many springs we have
-            console.log("Child height config:", child.hConfig);
+            // if the child is a spring, accumulate spring count - how many springs we have
             if (child instanceof Spring){
                 numSprings += 1
-                
             }else{
                 // sum up the natural size of all our non-spring children
                 natSum += child.hConfig.nat;
-                // - how much non-spring objects can compress (nat-min) total
+                // how much non-spring objects can compress (nat-min) total
                 let compr = child.hConfig.nat - child.hConfig.min;
                 availCompr += compr;
             }
             
         }
-        console.log("availCompr:", availCompr)
-        console.log("natSum:", natSum)
-        console.log("this.h:", this.h)
-
         return [natSum, availCompr, numSprings];
     }
 
@@ -230,23 +206,18 @@ export class Column extends Group {
     // the space at the bottom of the column as a fallback strategy).
     protected _expandChildSprings(excess : number, numSprings : number) : void {
         //===YOUR CODE HERE ===
-        // if tehre's no springs, skip
+        // if there's no springs, no expansion for spring
         if (numSprings == 0){
             return;
         }
-        // calculate average excess for each spring
+        // calculate average excess space assigned for each spring
         let eachExcess = excess / numSprings;
-        console.log("excess:", excess)
-        console.log("eachExcess:", eachExcess)
         for (let child of this.children) {
-            // Adjust the height of each spring
+            // assign the space (height) of each spring
             if (child instanceof Spring) {
-                console.log("spring h before expand:", child.h)
-                child.h += eachExcess; 
-                console.log("spring h after expand:", child.h)
+                child.h = eachExcess; 
             }
         }
-        // this.damageAll()
     }
 
     //. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -267,6 +238,7 @@ export class Column extends Group {
         // from the natural height of that child, to get the assigned height.
         for (let child of this.children) {
             //===YOUR CODE HERE ===
+            // springs are already assumed in calculating shortfall, jump
             if (!(child instanceof Spring)){
                 // calculate the fraction of shortfall should be assigned for this child
                 let compr = child.hConfig.nat - child.hConfig.min
